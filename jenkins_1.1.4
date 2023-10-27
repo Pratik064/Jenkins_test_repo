@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    parameters {
+        choice(name: 'ENVIRONMENT', choices: ['dev', 'test', 'prod'], description: 'Select the environment')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Deploy') {
+            steps {
+                script {
+                    if (params.ENVIRONMENT == 'dev') {
+                        sh 'deploy_to_dev'
+                    } else if (params.ENVIRONMENT == 'test') {
+                        sh 'deploy_to_test'
+                    } else if (params.ENVIRONMENT == 'prod') {
+                        sh 'deploy_to_prod'
+                    }
+                }
+            }
+        }
+    }
+}

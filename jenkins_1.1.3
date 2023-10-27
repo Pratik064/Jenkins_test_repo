@@ -1,0 +1,28 @@
+pipeline {
+    agent none
+
+    stages {
+        stage('Test') {
+            matrix {
+                axes {
+                    axis {
+                        name 'ENVIRONMENT'
+                        values 'dev', 'test', 'prod'
+                    }
+                }
+                stages {
+                    stage('Checkout') {
+                        steps {
+                            checkout scm
+                        }
+                    }
+                    stage('Run Tests') {
+                        steps {
+                            sh "run_tests_in_${ENVIRONMENT}"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

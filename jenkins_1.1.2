@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Build') {
+            when {
+                expression { currentBuild.branchName != 'master' }
+            }
+            steps {
+                sh 'your_build_command_here'
+            }
+        }
+        stage('Test') {
+            when {
+                expression { currentBuild.branchName != 'master' }
+            }
+            steps {
+                sh 'your_test_command_here'
+            }
+        }
+    }
+}
